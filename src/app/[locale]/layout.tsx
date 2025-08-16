@@ -33,28 +33,52 @@ type Props = {
   params: { locale: string }
 }
 
-export const metadata: Metadata = {
-  title: "MESCO - Metal Forming Technologies",
-  description: "MESCO - Metal Forming Technologies | Laminasyon Pres Hatları, Pres Besleme Sistemleri ve Üretim Hatları konusunda uzman çözümler.",
-  metadataBase: new URL('https://mesco.com.tr'),
-  icons: {
-    icon: '/favicon.ico',
-  },
-  openGraph: {
-    title: 'MESCO - Metal Forming Technologies',
-    description: 'MESCO - Metal Forming Technologies | Laminasyon Pres Hatları, Pres Besleme Sistemleri ve Üretim Hatları konusunda uzman çözümler.',
-    url: 'https://mesco.com.tr',
-    siteName: 'MESCO',
-    images: [
-      {
-        url: '/images/og-image.jpg',
-        width: 1200,
-        height: 630,
-      },
-    ],
-    locale: 'tr_TR',
-    type: 'website',
-  },
+export async function generateMetadata({ params }: { params: { locale: string } }): Promise<Metadata> {
+  const locale = params.locale
+  
+  const titles = {
+    tr: "MESCO - Metal Şekillendirme Teknolojileri",
+    en: "MESCO - Metal Forming Technologies"
+  }
+  
+  const descriptions = {
+    tr: "MESCO - Metal Şekillendirme Teknolojileri | Laminasyon Pres Hatları, Pres Besleme Sistemleri ve Üretim Hatları konusunda uzman çözümler.",
+    en: "MESCO - Metal Forming Technologies | Expert solutions in Lamination Press Lines, Press Feeding Systems and Production Lines."
+  }
+  
+  const urls = {
+    tr: 'https://mesco.com.tr/tr',
+    en: 'https://mesco.com.tr/en'
+  }
+  
+  const locales = {
+    tr: 'tr_TR',
+    en: 'en_US'
+  }
+  
+  return {
+    title: titles[locale as keyof typeof titles] || titles.en,
+    description: descriptions[locale as keyof typeof descriptions] || descriptions.en,
+    metadataBase: new URL('https://mesco.com.tr'),
+    icons: {
+      icon: '/favicon.ico',
+    },
+    openGraph: {
+      title: titles[locale as keyof typeof titles] || titles.en,
+      description: descriptions[locale as keyof typeof descriptions] || descriptions.en,
+      url: urls[locale as keyof typeof urls] || urls.en,
+      siteName: 'MESCO',
+      images: [
+        {
+          url: '/images/og-image.jpg',
+          width: 1200,
+          height: 630,
+        },
+      ],
+      locale: locales[locale as keyof typeof locales] || locales.en,
+      type: 'website',
+    },
+  }
 }
 
 export default async function RootLayout({
