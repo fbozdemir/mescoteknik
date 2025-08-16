@@ -1,0 +1,167 @@
+'use client'
+
+import { useState, useEffect } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import Link from 'next/link'
+import { useParams } from 'next/navigation'
+import Image from 'next/image'
+
+const slides = [
+  {
+    id: 1,
+    image: '/images/slide1.jpg',
+    title: 'KALİTE & İNOVASYON',
+    subtitle: 'ANAHTAR TESLİM ÇÖZÜMLER',
+    description: 'Sektörde Kalite Standartlarını Yenilikçi Çözümlerimizle Birleştiriyoruz.'
+  },
+  {
+    id: 2,
+    image: '/images/slide2.jpg',
+    title: 'MODERN TEKNOLOJİ',
+    subtitle: 'ÜRETİM HATLARI',
+    description: 'En Son Teknoloji ile Donatılmış Üretim Hatları'
+  },
+  {
+    id: 3,
+    image: '/images/slide3.jpg',
+    title: 'PROFESYONEL HİZMET',
+    subtitle: 'UZMAN KADRO',
+    description: 'Deneyimli Ekibimizle Kesintisiz Teknik Destek'
+  }
+]
+
+export function HeroSlider() {
+  const [currentSlide, setCurrentSlide] = useState(0)
+  const params = useParams()
+  const locale = params.locale as string
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length)
+    }, 5000)
+    return () => clearInterval(timer)
+  }, [])
+
+  return (
+    <div className="relative w-full h-[calc(100vh-80px)] overflow-hidden">
+      <AnimatePresence mode="sync" initial={false}>
+        <motion.div
+          key={currentSlide}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ 
+            duration: 1,
+            ease: "easeInOut"
+          }}
+          className="absolute inset-0"
+        >
+          {/* Background Image */}
+          <div className="absolute inset-0">
+            <Image
+              src={slides[currentSlide].image}
+              alt={slides[currentSlide].title}
+              fill
+              priority
+              className="object-cover"
+            />
+          </div>
+          {/* Overlay */}
+          <div className="absolute inset-0 bg-black/20" />
+          
+          {/* Content */}
+          <div className="relative z-10 flex flex-col items-start justify-center h-full px-8 md:px-24">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ 
+                duration: 1,
+                ease: "easeInOut"
+              }}
+            >
+              <h2 className="text-[45px] leading-[54px] font-bold text-white mb-2">
+                {slides[currentSlide].title}
+              </h2>
+              <h1 className="text-[45px] leading-[54px] font-normal text-white mb-6">
+                {slides[currentSlide].subtitle}
+              </h1>
+              <p className="text-white text-[20px] leading-[30px] font-extralight mb-8 max-w-2xl">
+                {slides[currentSlide].description}
+              </p>
+              <div className="flex items-center gap-8">
+                <Link
+                  href={`/${locale}/${locale === 'tr' ? 'hakkimizda' : 'about'}`}
+                  className="group relative inline-flex items-center px-8 py-3 border border-white text-white rounded-full overflow-hidden transition-colors duration-300 hover:border-[#258535]"
+                >
+                  <span className="relative z-10 flex items-center text-base leading-6 font-light transition-colors duration-300 group-hover:text-white">
+                    {locale === 'tr' ? 'Hakkımızda' : 'About Us'}
+                    <svg 
+                      className="ml-2 w-4 h-4" 
+                      fill="none" 
+                      viewBox="0 0 24 24" 
+                      stroke="currentColor"
+                    >
+                      <path 
+                        strokeLinecap="round" 
+                        strokeLinejoin="round" 
+                        strokeWidth={2} 
+                        d="M9 5l7 7-7 7"
+                      />
+                    </svg>
+                  </span>
+                  <div className="absolute inset-0 w-full transform scale-x-0 origin-left transition-transform duration-300 bg-[#258535] group-hover:scale-x-100" />
+                </Link>
+              </div>
+            </motion.div>
+          </div>
+        </motion.div>
+      </AnimatePresence>
+
+      {/* Modern Navigation Bar */}
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20">
+        <div className="flex gap-3">
+          {slides.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentSlide(index)}
+              className={`h-[2px] transition-all duration-300 ${
+                currentSlide === index 
+                  ? 'w-8 bg-[#258535]' 
+                  : 'w-4 bg-white/40 hover:bg-[#258535]'
+              }`}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* Scroll Button */}
+      <div 
+        className="absolute bottom-8 right-24 z-20 cursor-pointer group hidden md:flex items-center gap-0.5"
+        onClick={() => {
+          window.scrollTo({
+            top: window.innerHeight - 80,
+            behavior: 'smooth'
+          })
+        }}
+      >
+        <span className="text-white/30 text-xs tracking-wider rotate-180" style={{ writingMode: 'vertical-rl' }}>
+          {locale === 'tr' ? 'Kaydır' : 'Scroll'}
+        </span>
+        <div className="w-7 h-12 border-[0.5px] border-white/40 rounded-full relative flex items-center justify-center overflow-hidden transition-colors duration-300 group-hover:border-white/60">
+          <div className="absolute inset-0 bg-white/10 backdrop-blur transition-all duration-300 opacity-0 group-hover:opacity-100" />
+          <motion.div
+            className="w-1 h-3 bg-[#258535] rounded-full relative z-10"
+            animate={{
+              y: [0, 12, 0]
+            }}
+            transition={{
+              duration: 2.5,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+          />
+        </div>
+      </div>
+    </div>
+  )
+} 

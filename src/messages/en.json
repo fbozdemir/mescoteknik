@@ -1,0 +1,20 @@
+{
+  "Index": {
+    "title": "Welcome to Our Company",
+    "description": "We are a modern company focused on delivering value to our customers.",
+    "learnMore": "Learn More",
+    "contactUs": "Contact Us"
+  },
+  "Navigation": {
+    "home": "Home",
+    "corporate": "About Us",
+    "products": "Products",
+    "references": "References",
+    "contact": "Contact"
+  },
+  "Meta": {
+    "title": "Company Name - Modern Corporate Solutions",
+    "description": "Our company provides modern and innovative corporate solutions with a focus on customer satisfaction.",
+    "keywords": "corporate, solutions, technology, innovation"
+  }
+} 
