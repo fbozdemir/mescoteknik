@@ -32,15 +32,33 @@ const slides = [
 
 export function HeroSlider() {
   const [currentSlide, setCurrentSlide] = useState(0)
+  const [isClient, setIsClient] = useState(false)
   const params = useParams()
-  const locale = params.locale as string
+  const locale = params?.locale as string || 'tr'
 
   useEffect(() => {
+    setIsClient(true)
+  }, [])
+
+  useEffect(() => {
+    if (!isClient) return
+    
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length)
     }, 5000)
     return () => clearInterval(timer)
-  }, [])
+  }, [isClient])
+
+  // Client-side rendering kontrolü
+  if (!isClient) {
+    return (
+      <div className="relative w-full h-[calc(100vh-80px)] overflow-hidden bg-gray-100 animate-pulse">
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="text-gray-400">Loading...</div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="relative w-full h-[calc(100vh-80px)] overflow-hidden">
@@ -59,11 +77,14 @@ export function HeroSlider() {
           {/* Background Image */}
           <div className="absolute inset-0">
             <Image
-              src={slides[currentSlide].image}
-              alt={slides[currentSlide].title}
+              src={slides[currentSlide]?.image || slides[0].image}
+              alt={slides[currentSlide]?.title || slides[0].title}
               fill
               priority
               className="object-cover"
+              onError={(e) => {
+                console.error('Image load error:', e)
+              }}
             />
           </div>
           {/* Overlay */}
@@ -80,13 +101,13 @@ export function HeroSlider() {
               }}
             >
               <h2 className="text-[45px] leading-[54px] font-bold text-white mb-2">
-                {slides[currentSlide].title}
+                {slides[currentSlide]?.title || slides[0].title}
               </h2>
               <h1 className="text-[45px] leading-[54px] font-normal text-white mb-6">
-                {slides[currentSlide].subtitle}
+                {slides[currentSlide]?.subtitle || slides[0].subtitle}
               </h1>
               <p className="text-white text-[20px] leading-[30px] font-extralight mb-8 max-w-2xl">
-                {slides[currentSlide].description}
+                {slides[currentSlide]?.description || slides[0].description}
               </p>
               <div className="flex items-center gap-8">
                 <Link
@@ -138,10 +159,12 @@ export function HeroSlider() {
       <div 
         className="absolute bottom-8 right-24 z-20 cursor-pointer group hidden md:flex items-center gap-0.5"
         onClick={() => {
-          window.scrollTo({
-            top: window.innerHeight - 80,
-            behavior: 'smooth'
-          })
+          if (typeof window !== 'undefined') {
+            window.scrollTo({
+              top: window.innerHeight - 80,
+              behavior: 'smooth'
+            })
+          }
         }}
       >
         <span className="text-white/30 text-xs tracking-wider rotate-180" style={{ writingMode: 'vertical-rl' }}>

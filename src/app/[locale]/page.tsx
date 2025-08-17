@@ -7,6 +7,19 @@ import { LaminationSlider } from '@/components/lamination-slider'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
+import { Suspense, useState } from 'react'
+
+// Loading Component
+function LoadingFallback() {
+  return (
+    <div className="pt-24 min-h-screen flex items-center justify-center">
+      <div className="text-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-500 mx-auto"></div>
+        <p className="mt-4 text-gray-600">Yükleniyor...</p>
+      </div>
+    </div>
+  )
+}
 
 export default function Home() {
   const params = useParams();
@@ -16,22 +29,30 @@ export default function Home() {
     <div className="pt-24"> {/* Navbar height offset */}
       {/* Hero Section */}
       <section className="relative">
-        <HeroSlider />
+        <Suspense fallback={<LoadingFallback />}>
+          <HeroSlider />
+        </Suspense>
       </section>
 
       {/* Lamination Section */}
       <section className="relative">
-        <LaminationSlider />
+        <Suspense fallback={<LoadingFallback />}>
+          <LaminationSlider />
+        </Suspense>
       </section>
 
       {/* Production Lines Section */}
       <section className="relative">
-        <ProductionLinesSlider />
+        <Suspense fallback={<LoadingFallback />}>
+          <ProductionLinesSlider />
+        </Suspense>
       </section>
 
       {/* Product Groups Section */}
       <section className="relative">
-        <ProductGroupSlider />
+        <Suspense fallback={<LoadingFallback />}>
+          <ProductGroupSlider />
+        </Suspense>
       </section>
 
       {/* About Section */}
@@ -41,12 +62,15 @@ export default function Home() {
             {/* Sol Taraf - Fotoğraf (2/5) */}
             <div className="order-1 lg:order-1 lg:col-span-2">
               <div className="relative aspect-[4/3] overflow-hidden rounded-sm">
-                                       <Image
-                         src="/images/product-groups/breadcrumb-product-detail-1.jpg"
-                         alt="MESCO Endüstriyel Makine"
+                <Image
+                  src="/images/product-groups/breadcrumb-product-detail-1.jpg"
+                  alt="MESCO Endüstriyel Makine"
                   fill
                   className="object-cover"
                   priority
+                  onError={(e) => {
+                    console.error('Image load error:', e)
+                  }}
                 />
               </div>
             </div>
