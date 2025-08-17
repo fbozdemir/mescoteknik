@@ -7,7 +7,7 @@ import { LaminationSlider } from '@/components/lamination-slider'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
-import { Suspense, useState } from 'react'
+import { Suspense, useState, useEffect } from 'react'
 
 // Loading Component
 function LoadingFallback() {
@@ -21,9 +21,37 @@ function LoadingFallback() {
   )
 }
 
+// Error Component
+function ErrorFallback({ componentName }: { componentName: string }) {
+  return (
+    <div className="pt-24 min-h-screen flex items-center justify-center">
+      <div className="text-center">
+        <div className="text-red-500 text-4xl mb-4">⚠️</div>
+        <h2 className="text-xl font-semibold text-gray-800 mb-2">{componentName} yüklenemedi</h2>
+        <p className="text-gray-600 mb-4">Lütfen sayfayı yenileyin</p>
+        <button
+          onClick={() => window.location.reload()}
+          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+        >
+          Sayfayı Yenile
+        </button>
+      </div>
+    </div>
+  )
+}
+
 export default function Home() {
   const params = useParams();
   const locale = params?.locale as string || 'tr';
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  if (!isClient) {
+    return <LoadingFallback />;
+  }
 
   return (
     <div className="pt-24"> {/* Navbar height offset */}

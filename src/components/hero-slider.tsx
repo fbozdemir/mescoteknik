@@ -33,6 +33,7 @@ const slides = [
 export function HeroSlider() {
   const [currentSlide, setCurrentSlide] = useState(0)
   const [isClient, setIsClient] = useState(false)
+  const [hasError, setHasError] = useState(false)
   const params = useParams()
   const locale = params?.locale as string || 'tr'
 
@@ -43,22 +44,53 @@ export function HeroSlider() {
   useEffect(() => {
     if (!isClient) return
     
-    const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % slides.length)
-    }, 5000)
-    return () => clearInterval(timer)
+    try {
+      const timer = setInterval(() => {
+        setCurrentSlide((prev) => (prev + 1) % slides.length)
+      }, 5000)
+      return () => clearInterval(timer)
+    } catch (error) {
+      console.error('Timer error:', error)
+      setHasError(true)
+    }
   }, [isClient])
+
+  // Error state
+  if (hasError) {
+    return (
+      <div className="relative w-full h-[calc(100vh-80px)] overflow-hidden bg-gray-100">
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="text-center">
+            <div className="text-red-500 text-xl mb-4">⚠️</div>
+            <p className="text-gray-600">Slider yüklenirken hata oluştu</p>
+            <button 
+              onClick={() => setHasError(false)}
+              className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+            >
+              Tekrar Dene
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   // Client-side rendering kontrolü
   if (!isClient) {
     return (
       <div className="relative w-full h-[calc(100vh-80px)] overflow-hidden bg-gray-100 animate-pulse">
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className="text-gray-400">Loading...</div>
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-500 mx-auto mb-4"></div>
+            <div className="text-gray-400">Yükleniyor...</div>
+          </div>
         </div>
       </div>
     )
   }
+
+  // Safe slide access
+  const currentSlideData = slides[currentSlide] || slides[0]
 
   return (
     <div className="relative w-full h-[calc(100vh-80px)] overflow-hidden">
@@ -77,13 +109,14 @@ export function HeroSlider() {
           {/* Background Image */}
           <div className="absolute inset-0">
             <Image
-              src={slides[currentSlide]?.image || slides[0].image}
-              alt={slides[currentSlide]?.title || slides[0].title}
+              src={currentSlideData.image}
+              alt={currentSlideData.title}
               fill
               priority
               className="object-cover"
               onError={(e) => {
                 console.error('Image load error:', e)
+                setHasError(true)
               }}
             />
           </div>
@@ -101,13 +134,13 @@ export function HeroSlider() {
               }}
             >
               <h2 className="text-[45px] leading-[54px] font-bold text-white mb-2">
-                {slides[currentSlide]?.title || slides[0].title}
+                {currentSlideData.title}
               </h2>
               <h1 className="text-[45px] leading-[54px] font-normal text-white mb-6">
-                {slides[currentSlide]?.subtitle || slides[0].subtitle}
+                {currentSlideData.subtitle}
               </h1>
               <p className="text-white text-[20px] leading-[30px] font-extralight mb-8 max-w-2xl">
-                {slides[currentSlide]?.description || slides[0].description}
+                {currentSlideData.description}
               </p>
               <div className="flex items-center gap-8">
                 <Link
@@ -159,11 +192,15 @@ export function HeroSlider() {
       <div 
         className="absolute bottom-8 right-24 z-20 cursor-pointer group hidden md:flex items-center gap-0.5"
         onClick={() => {
-          if (typeof window !== 'undefined') {
-            window.scrollTo({
-              top: window.innerHeight - 80,
-              behavior: 'smooth'
-            })
+          try {
+            if (typeof window !== 'undefined') {
+              window.scrollTo({
+                top: window.innerHeight - 80,
+                behavior: 'smooth'
+              })
+            }
+          } catch (error) {
+            console.error('Scroll error:', error)
           }
         }}
       >
