@@ -12,7 +12,12 @@ const config = {
         port: '',
         pathname: '/**',
       }
-    ]
+    ],
+    unoptimized: false,
+    formats: ['image/webp', 'image/avif'],
+  },
+  experimental: {
+    optimizePackageImports: ['framer-motion', 'lucide-react']
   }
 };
 
