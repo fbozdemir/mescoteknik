@@ -34,7 +34,18 @@ export const urlMappings = {
   'kalin-parcalar-icin-hizli-hassas-pres-hatlari': 'high-tensile-stamping-press-lines',
   'soguk-sekillendirme-pres-hatlari': 'cold-forming-press-lines',
   'otomasyon': 'automation',
-  'servis': 'service'
+  'servis': 'service',
+  
+  // Kompakt Seriler
+  'kompakt-h-serisi': 'compact-h-series',
+  'kompakt-l-serisi': 'compact-l-series',
+  'kompakt-m-serisi': 'compact-m-series',
+  
+  // Mini Servo
+  'mini-dogrultmali-servo-surucu': 'mini-servo-feeder-with-straightener',
+  
+  // Diğer Ürünler
+  'dogrultmali-servo-surucu': 'servo-feeder-with-straightener'
 } as const;
 
 export type UrlKey = keyof typeof urlMappings;
@@ -50,4 +61,14 @@ export function getTurkishUrl(englishUrl: string): string {
   const entries = Object.entries(urlMappings);
   const found = entries.find(([, value]) => value === englishUrl);
   return found ? found[0] : englishUrl;
+}
+
+// URL'nin hangi dilde olduğunu kontrol et
+export function isTurkishUrl(url: string): boolean {
+  return Object.keys(urlMappings).includes(url);
+}
+
+// URL'nin hangi dilde olduğunu kontrol et
+export function isEnglishUrl(url: string): boolean {
+  return Object.values(urlMappings).includes(url as any);
 } 
