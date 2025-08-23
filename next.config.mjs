@@ -18,7 +18,10 @@ const config = {
   },
   experimental: {
     optimizePackageImports: ['framer-motion', 'lucide-react']
-  }
+  },
+  // Ensure proper locale handling in production
+  trailingSlash: false,
+  skipMiddlewareUrlNormalize: true
 };
 
 export default withNextIntl(config); 

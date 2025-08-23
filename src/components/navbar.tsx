@@ -232,7 +232,7 @@ export function Navbar() {
                                 {menuItems[locale as keyof typeof menuItems].products.items[0].subItems?.map((item, idx) => (
                                   <Link 
                                     key={idx} 
-                                    href={item.href || '#'} 
+                                    href={`/${locale}${item.href}` || '#'} 
                                     className="block text-gray-600 hover:text-[#258535] py-1 text-sm"
                                     onClick={() => setNavState(prev => ({ ...prev, isProductsMenuOpen: false }))}
                                   >
@@ -277,7 +277,7 @@ export function Navbar() {
                                 {menuItems[locale as keyof typeof menuItems].products.items[4].subItems?.[0].subItems?.map((item, idx) => (
                                   <Link 
                                     key={idx} 
-                                    href={item.href || '#'} 
+                                    href={`/${locale}${item.href}` || '#'} 
                                     className="block text-gray-600 hover:text-[#258535] py-1 text-sm"
                                     onClick={() => setNavState(prev => ({ ...prev, isProductsMenuOpen: false }))}
                                   >
@@ -292,7 +292,7 @@ export function Navbar() {
                                 {menuItems[locale as keyof typeof menuItems].products.items[4].subItems?.[1].subItems?.map((item, idx) => (
                                   <Link 
                                     key={idx} 
-                                    href={item.href || '#'} 
+                                    href={`/${locale}${item.href}` || '#'} 
                                     className="block text-gray-600 hover:text-[#258535] py-1 text-sm"
                                     onClick={() => setNavState(prev => ({ ...prev, isProductsMenuOpen: false }))}
                                   >
@@ -307,7 +307,7 @@ export function Navbar() {
                                 {menuItems[locale as keyof typeof menuItems].products.items[4].subItems?.[2].subItems?.map((item, idx) => (
                                   <Link 
                                     key={idx} 
-                                    href={item.href || '#'} 
+                                    href={`/${locale}${item.href}` || '#'} 
                                     className="block text-gray-600 hover:text-[#258535] py-1 text-sm"
                                     onClick={() => setNavState(prev => ({ ...prev, isProductsMenuOpen: false }))}
                                   >
@@ -322,7 +322,7 @@ export function Navbar() {
                                 {menuItems[locale as keyof typeof menuItems].products.items[4].subItems?.[3].subItems?.map((item, idx) => (
                               <Link 
                                     key={idx} 
-                                    href={item.href || '#'} 
+                                    href={`/${locale}${item.href}` || '#'} 
                                     className="block text-gray-600 hover:text-[#258535] py-1 text-sm"
                                 onClick={() => setNavState(prev => ({ ...prev, isProductsMenuOpen: false }))}
                               >
@@ -621,7 +621,7 @@ export function Navbar() {
                                   if (item.subItems && item.subItems.length > 0) {
                                     setActiveMobileSubmenu(activeMobileSubmenu === index.toString() ? null : index.toString())
                                   } else {
-                                    window.location.href = item.href || '#'
+                                    window.location.href = `/${locale}${item.href}` || '#'
                                     setNavState(prev => ({ ...prev, isMobileMenuOpen: false, isProductsMenuOpen: false }))
                                   }
                                 }}

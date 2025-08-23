@@ -62,7 +62,9 @@ export function middleware(request: NextRequest) {
   const handleI18nRouting = createMiddleware({
     locales,
     defaultLocale,
-    localePrefix: 'always'
+    localePrefix: 'always',
+    localeDetection: true,
+    alternateLinks: false
   });
 
   return handleI18nRouting(request);
