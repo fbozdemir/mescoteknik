@@ -690,7 +690,7 @@ export function Navbar() {
                                                         {subItem.subItems.map((nestedItem, nestedIndex) => (
                                                           <Link
                                                             key={nestedIndex}
-                                                            href={nestedItem.href || '#'}
+                                                            href={`/${locale}${nestedItem.href}` || '#'}
                                                             className="block p-3 text-gray-700 hover:text-[#258535] transition-colors font-normal text-sm"
                                                             onClick={() => {
                                                               setNavState(prev => ({ ...prev, isMobileMenuOpen: false, isProductsMenuOpen: false }))
@@ -706,7 +706,7 @@ export function Navbar() {
                                               </>
                                             ) : (
                                               <Link
-                                                href={subItem.href || '#'}
+                                                href={`/${locale}${subItem.href}` || '#'}
                                                 className="block p-3 text-gray-700 hover:text-[#258535] transition-colors font-normal text-sm"
                                                 onClick={() => {
                                                   setNavState(prev => ({ ...prev, isMobileMenuOpen: false, isProductsMenuOpen: false }))
