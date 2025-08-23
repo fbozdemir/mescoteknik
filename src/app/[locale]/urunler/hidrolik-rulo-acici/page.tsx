@@ -142,8 +142,8 @@ export default function HidrolikRuloAcici() {
       </section>
       
       {/* General Features & Technical Specifications */}
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="mb-12 border border-gray-200 rounded-lg p-12 bg-white">
+      <div className="container mx-auto px-2 sm:px-6 lg:px-8 py-12">
+        <div className="mb-12 border border-gray-200 rounded-lg p-4 sm:p-8 lg:p-12 bg-white">
           {/* General Features */}
           <div className="mb-8">
             <h2 className="text-[22px] leading-[30px] font-bold mb-6" style={{ color: 'rgb(105, 105, 105)' }}>GENEL ÖZELLİKLER:</h2>
