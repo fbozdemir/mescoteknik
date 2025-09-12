@@ -5,10 +5,9 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { useTranslations } from 'next-intl'
 import { useParams, usePathname } from 'next/navigation'
-import { getLocalizedPath, RouteKey, routes } from '@/config/routes'
+import { getLocalizedPath, RouteKey, routes, translateUrlPath } from '@/config/routes'
 import { useScrollDirection } from '@/hooks/useScrollDirection'
 import { menuItems } from '@/config/menu'
-import { getEnglishUrl, getTurkishUrl } from '@/config/urlMappings'
 import { motion, AnimatePresence } from 'framer-motion'
 
 // Custom hook for body overflow management
@@ -106,29 +105,11 @@ export function Navbar() {
 
   // Get localized path for language switching
   const getLocalizedFullPath = (targetLocale: string) => {
-    const pathParts = pathname.split('/')
-    const currentKey = getCurrentRouteKey()
+    // Mevcut URL path'ini çevir
+    const translatedPath = translateUrlPath(locale, targetLocale, pathname)
     
-    // Handle product pages
-    if (pathParts[2] === 'urunler' || pathParts[2] === 'products') {
-      const productPath = pathParts.slice(3)
-      const targetBase = targetLocale === 'tr' ? 'urunler' : 'products'
-      
-      // URL parçalarını çevir
-      const translatedParts = productPath.map(part => {
-        if (targetLocale === 'tr') {
-          return getTurkishUrl(part)
-        } else {
-          return getEnglishUrl(part)
-        }
-      })
-      
-      return `/${targetLocale}/${targetBase}${translatedParts.length > 0 ? '/' + translatedParts.join('/') : ''}`
-    }
-    
-    // Handle other pages
-    const localizedPath = getLocalizedPath(targetLocale, currentKey)
-    return `/${targetLocale}${localizedPath ? '/' + localizedPath : ''}`
+    // Target locale prefix'i ile döndür
+    return `/${targetLocale}${translatedPath ? '/' + translatedPath : ''}`
   }
 
   // Add scroll position check
@@ -241,21 +222,21 @@ export function Navbar() {
                                 ))}
                               </div>
                               <Link 
-                                href={menuItems[locale as keyof typeof menuItems].products.items[1].href || '#'} 
+                                href={`/${locale}${menuItems[locale as keyof typeof menuItems].products.items[1].href}` || '#'} 
                                 className="block text-gray-600 hover:text-[#258535] py-1"
                                 onClick={() => setNavState(prev => ({ ...prev, isProductsMenuOpen: false }))}
                               >
                                 {menuItems[locale as keyof typeof menuItems].products.items[1].title}
                               </Link>
                               <Link 
-                                href={menuItems[locale as keyof typeof menuItems].products.items[2].href || '#'} 
+                                href={`/${locale}${menuItems[locale as keyof typeof menuItems].products.items[2].href}` || '#'} 
                                 className="block text-gray-600 hover:text-[#258535] py-1"
                                 onClick={() => setNavState(prev => ({ ...prev, isProductsMenuOpen: false }))}
                               >
                                 {menuItems[locale as keyof typeof menuItems].products.items[2].title}
                               </Link>
                               <Link 
-                                href={menuItems[locale as keyof typeof menuItems].products.items[3].href || '#'} 
+                                href={`/${locale}${menuItems[locale as keyof typeof menuItems].products.items[3].href}` || '#'} 
                                 className="block text-gray-600 hover:text-[#258535] py-1"
                                 onClick={() => setNavState(prev => ({ ...prev, isProductsMenuOpen: false }))}
                               >
@@ -331,14 +312,14 @@ export function Navbar() {
                                 ))}
                               </div>
                               <Link 
-                                href={menuItems[locale as keyof typeof menuItems].products.items[4].subItems?.[4].href || '#'} 
+                                href={`/${locale}${menuItems[locale as keyof typeof menuItems].products.items[4].subItems?.[4].href}` || '#'} 
                                 className="block text-gray-600 hover:text-[#258535] py-1"
                                 onClick={() => setNavState(prev => ({ ...prev, isProductsMenuOpen: false }))}
                               >
                                 {locale === 'tr' ? 'Rulo Sac Açma – Doğrultma ve Sürme Grubu' : 'Decoilers – Straightener & Feeder System'}
                               </Link>
                               <Link 
-                                href={menuItems[locale as keyof typeof menuItems].products.items[4].subItems?.[5].href || '#'} 
+                                href={`/${locale}${menuItems[locale as keyof typeof menuItems].products.items[4].subItems?.[5].href}` || '#'} 
                                 className="block text-gray-600 hover:text-[#258535] py-1"
                                 onClick={() => setNavState(prev => ({ ...prev, isProductsMenuOpen: false }))}
                               >
@@ -354,70 +335,70 @@ export function Navbar() {
                             </div>
                             <div className="space-y-2">
                               <Link 
-                                href={menuItems[locale as keyof typeof menuItems].products.items[5].href || '#'} 
+                                href={`/${locale}${menuItems[locale as keyof typeof menuItems].products.items[5].href}` || '#'} 
                                 className="block text-gray-600 hover:text-[#258535] py-1"
                                 onClick={() => setNavState(prev => ({ ...prev, isProductsMenuOpen: false }))}
                               >
                                 {menuItems[locale as keyof typeof menuItems].products.items[5].title}
                               </Link>
                               <Link 
-                                href={menuItems[locale as keyof typeof menuItems].products.items[6].href || '#'} 
+                                href={`/${locale}${menuItems[locale as keyof typeof menuItems].products.items[6].href}` || '#'} 
                                 className="block text-gray-600 hover:text-[#258535] py-1"
                                 onClick={() => setNavState(prev => ({ ...prev, isProductsMenuOpen: false }))}
                               >
                                 {menuItems[locale as keyof typeof menuItems].products.items[6].title}
                               </Link>
                               <Link 
-                                href={menuItems[locale as keyof typeof menuItems].products.items[7].href || '#'} 
+                                href={`/${locale}${menuItems[locale as keyof typeof menuItems].products.items[7].href}` || '#'} 
                                 className="block text-gray-600 hover:text-[#258535] py-1"
                                 onClick={() => setNavState(prev => ({ ...prev, isProductsMenuOpen: false }))}
                               >
                                 {menuItems[locale as keyof typeof menuItems].products.items[7].title}
                               </Link>
                               <Link 
-                                href={menuItems[locale as keyof typeof menuItems].products.items[8].href || '#'} 
+                                href={`/${locale}${menuItems[locale as keyof typeof menuItems].products.items[8].href}` || '#'} 
                                 className="block text-gray-600 hover:text-[#258535] py-1"
                                 onClick={() => setNavState(prev => ({ ...prev, isProductsMenuOpen: false }))}
                               >
                                 {menuItems[locale as keyof typeof menuItems].products.items[8].title}
                               </Link>
                               <Link 
-                                href={menuItems[locale as keyof typeof menuItems].products.items[9].href || '#'} 
+                                href={`/${locale}${menuItems[locale as keyof typeof menuItems].products.items[9].href}` || '#'} 
                                 className="block text-gray-600 hover:text-[#258535] py-1"
                                 onClick={() => setNavState(prev => ({ ...prev, isProductsMenuOpen: false }))}
                               >
                                 {menuItems[locale as keyof typeof menuItems].products.items[9].title}
                               </Link>
                               <Link 
-                                href={menuItems[locale as keyof typeof menuItems].products.items[10].href || '#'} 
+                                href={`/${locale}${menuItems[locale as keyof typeof menuItems].products.items[10].href}` || '#'} 
                                 className="block text-gray-600 hover:text-[#258535] py-1"
                                 onClick={() => setNavState(prev => ({ ...prev, isProductsMenuOpen: false }))}
                               >
                                 {menuItems[locale as keyof typeof menuItems].products.items[10].title}
                               </Link>
                               <Link 
-                                href={menuItems[locale as keyof typeof menuItems].products.items[11].href || '#'} 
+                                href={`/${locale}${menuItems[locale as keyof typeof menuItems].products.items[11].href}` || '#'} 
                                 className="block text-gray-600 hover:text-[#258535] py-1"
                                 onClick={() => setNavState(prev => ({ ...prev, isProductsMenuOpen: false }))}
                               >
                                 {menuItems[locale as keyof typeof menuItems].products.items[11].title}
                               </Link>
                               <Link 
-                                href={menuItems[locale as keyof typeof menuItems].products.items[12].href || '#'} 
+                                href={`/${locale}${menuItems[locale as keyof typeof menuItems].products.items[12].href}` || '#'} 
                                 className="block text-gray-600 hover:text-[#258535] py-1"
                                 onClick={() => setNavState(prev => ({ ...prev, isProductsMenuOpen: false }))}
                               >
                                 {menuItems[locale as keyof typeof menuItems].products.items[12].title}
                               </Link>
                               <Link 
-                                href={menuItems[locale as keyof typeof menuItems].products.items[13].href || '#'} 
+                                href={`/${locale}${menuItems[locale as keyof typeof menuItems].products.items[13].href}` || '#'} 
                                 className="block text-gray-600 hover:text-[#258535] py-1"
                                 onClick={() => setNavState(prev => ({ ...prev, isProductsMenuOpen: false }))}
                               >
                                 {menuItems[locale as keyof typeof menuItems].products.items[13].title}
                               </Link>
                               <Link 
-                                href={menuItems[locale as keyof typeof menuItems].products.items[14].href || '#'} 
+                                href={`/${locale}${menuItems[locale as keyof typeof menuItems].products.items[14].href}` || '#'} 
                                 className="block text-gray-600 hover:text-[#258535] py-1"
                                 onClick={() => setNavState(prev => ({ ...prev, isProductsMenuOpen: false }))}
                               >

@@ -21,7 +21,7 @@ const productGroups: ProductGroup[] = [
   {
     id: 2,
     title: 'Mekanik Rulo Açıcı',
-    image: '/images/product-groups/mekanik-rulo.jpg',
+    image: '/images/product-groups/mechanical-decoiler.jpg',
     href: '/urunler/mekanik-rulo-acici',
   },
   {
