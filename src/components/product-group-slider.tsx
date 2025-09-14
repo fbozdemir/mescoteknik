@@ -180,6 +180,9 @@ export function ProductGroupSlider() {
                           alt={group.title}
                           fill
                           className="object-cover will-change-transform transition-transform duration-300 group-hover:scale-105"
+                          sizes="(max-width: 768px) 100vw, 33vw"
+                          loading={group.id <= 3 ? 'eager' : 'lazy'}
+                          priority={group.id <= 2}
                         />
                       </a>
                     </div>

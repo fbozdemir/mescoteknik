@@ -55,7 +55,7 @@ const laminationProducts: LaminationProduct[] = [
     id: 6,
     title: 'Rotor ve Stator Lazer Kesim Makineleri',
     description: 'Yüksek hassasiyetli lazer kesim teknolojisi ile rotor ve stator üretimi. Temiz kesim ve minimum malzeme kaybı.',
-    image: '/images/product-groups/rotor-stator-laser-cutting.jpg',
+    image: '/images/product-groups/Produktbild_effective_l.jpg',
     href: '/urunler/rotor-stator-lazer-kesim-makineleri',
   },
 ];
@@ -112,7 +112,7 @@ export function LaminationSlider() {
                       <div className="space-y-4 lg:space-y-8">
                         <div>
                           <a href={product.href} className="inline-block group/title">
-                            <h2 className="text-[26px] leading-[31px] font-medium text-[#1A1A1A] mb-4 lg:mb-6 group-hover/title:text-[#258535] transition-colors duration-300">
+                            <h2 className="text-[26px] leading-[31px] font-medium text-[rgb(92,92,92)] mb-4 lg:mb-6 group-hover/title:text-black transition-colors duration-300">
                               {product.title}
                             </h2>
                           </a>

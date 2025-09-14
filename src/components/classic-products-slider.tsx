@@ -28,7 +28,7 @@ const classicProducts = [
   {
     id: 4,
     title: "Mekanik Rulo Açıcı",
-    image: "/images/product-groups/mekanik-rulo.jpg",
+    image: "/images/product-groups/mechanical-decoiler.jpg",
     href: "/urunler/mekanik-rulo-acici"
   },
   {

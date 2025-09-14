@@ -112,8 +112,10 @@ export function HeroSlider() {
               src={currentSlideData.image}
               alt={currentSlideData.title}
               fill
-              priority
+              priority={currentSlide === 0}
+              loading={currentSlide === 0 ? 'eager' : 'lazy'}
               className="object-cover"
+              sizes="100vw"
               onError={(e) => {
                 console.error('Image load error:', e)
                 setHasError(true)

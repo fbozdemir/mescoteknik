@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import Slider from 'react-slick';
 import Image from 'next/image';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
@@ -56,47 +56,83 @@ const productionLines: ProductionLine[] = [
 export function ProductionLinesSlider() {
   const slider1Ref = useRef<Slider>(null);
   const slider2Ref = useRef<Slider>(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
-  const settings = {
+  // Metin tarafı: linear slayt (infinite: false)
+  const settingsText = {
     dots: false,
-    infinite: true,
+    infinite: false,
     speed: 800,
     slidesToShow: 1,
     slidesToScroll: 1,
-    autoplay: true,
+    autoplay: false,
     autoplaySpeed: 5000,
     arrows: false,
     fade: false,
     pauseOnHover: false,
     pauseOnFocus: false,
     swipe: false,
+    touchMove: false,
+    beforeChange: (_old: number, next: number) => setCurrentIndex(next)
+  } as const;
+
+  // Görsel tarafı: linear slayt (infinite: false) + fade
+  const settingsImage = {
+    dots: false,
+    infinite: false,
+    speed: 700,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: false,
+    autoplaySpeed: 5000,
+    arrows: false,
+    fade: true,
+    pauseOnHover: false,
+    pauseOnFocus: false,
+    swipe: false,
     touchMove: false
-  };
+  } as const;
+
+  const { dashArray, dashOffset } = useMemo(() => {
+    const total = productionLines.length;
+    const progress = ((currentIndex % total) + 1) / total;
+    const radius = 46; // 100x100 viewBox içinde
+    const circumference = 2 * Math.PI * radius;
+    return { dashArray: circumference, dashOffset: circumference * (1 - progress) };
+  }, [currentIndex]);
 
   const nextSlide = () => {
-    slider1Ref.current?.slickNext();
-    slider2Ref.current?.slickNext();
+    if (currentIndex < productionLines.length - 1) {
+      slider1Ref.current?.slickNext();
+      slider2Ref.current?.slickNext();
+    }
   };
 
   const prevSlide = () => {
-    slider1Ref.current?.slickPrev();
-    slider2Ref.current?.slickPrev();
+    if (currentIndex > 0) {
+      slider1Ref.current?.slickPrev();
+      slider2Ref.current?.slickPrev();
+    }
   };
 
+  // Navigasyon butonlarının aktif/pasif durumları
+  const isFirstSlide = currentIndex === 0;
+  const isLastSlide = currentIndex === productionLines.length - 1;
+
   return (
-    <section className="relative bg-[#f6f6f6] pt-20 pb-20">
+    <section id="pls-slider" className="relative bg-[#f6f6f6] pt-20 pb-20">
       <div className="container mx-auto px-4">
         <div className="max-w-[1400px] mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 lg:gap-16 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 lg:gap-16 items-center">
             {/* Content Side */}
             <div className="relative order-1 lg:order-1">
-              <h2 className="text-[32px] leading-[40px] font-medium text-[#258535] mb-6">
+              <h2 className="text-[40px] leading-[50px] font-medium text-[#258535] mb-6">
                 Üretim Hatları
               </h2>
               
               <div className="content-wrapper">
                 <Slider
-                  {...settings}
+                  {...settingsText}
                   ref={slider1Ref}
                   asNavFor={slider2Ref.current || undefined}
                 >
@@ -105,7 +141,7 @@ export function ProductionLinesSlider() {
                       <div className="space-y-4 lg:space-y-8">
                         <div>
                           <a href={product.href} className="inline-block group/title">
-                            <h2 className="text-[26px] leading-[31px] font-medium text-[#1A1A1A] mb-4 lg:mb-6 group-hover/title:text-[#FFB800] transition-colors duration-300">
+                            <h2 className="text-[30px] leading-[38px] font-medium text-[rgb(92,92,92)] mb-4 lg:mb-6 group-hover/title:text-black transition-colors duration-300">
                               {product.title}
                             </h2>
                           </a>
@@ -147,22 +183,83 @@ export function ProductionLinesSlider() {
             <div className="relative order-2 lg:order-2">
               <div className="image-wrapper">
                 <Slider
-                  {...settings}
+                  {...settingsImage}
                   ref={slider2Ref}
                   asNavFor={slider1Ref.current || undefined}
                 >
                   {productionLines.map((product) => (
                     <div key={product.id} className="relative outline-none">
-                      <div className="relative aspect-[16/9]">
-                        <a href={product.href} className="block w-full h-full group/image">
-                          <Image
-                            src={product.image}
-                            alt={product.title}
-                            fill
-                            className="object-cover transition-transform duration-500 group-hover/image:scale-105"
-                            priority
-                          />
-                        </a>
+                      <div className="relative aspect-[16/9] flex items-center justify-center">
+                        <div className="relative w-[min(98%,880px)] aspect-square">
+                          {/* Dış halka (gri temel) ve ilerleme halkası (yeşil) */}
+                          <svg className="absolute inset-0" viewBox="0 0 100 100" aria-hidden="true">
+                            <circle cx="50" cy="50" r="46" fill="none" stroke="#ececec" strokeWidth="0.5" />
+                            <circle
+                              cx="50"
+                              cy="50"
+                              r="46"
+                              fill="none"
+                              stroke="#258535"
+                              strokeWidth="0.8"
+                              strokeLinecap="round"
+                              strokeDasharray={dashArray}
+                              strokeDashoffset={dashOffset}
+                              style={{ transition: 'stroke-dashoffset 0.8s ease', transform: 'rotate(-20deg)', transformOrigin: '50% 50%' }}
+                            />
+                          </svg>
+
+                          {/* Dairesel görsel - ölçek tabanlı geçiş animasyonu (sadece görsel alanı) */}
+                          <a href={product.href} className="absolute inset-[6%] rounded-full overflow-hidden block group/image image-slide shadow-[0_10px_30px_rgba(0,0,0,0.08)] bg-white">
+                            <Image
+                              src={product.image}
+                              alt={product.title}
+                              fill
+                              className="object-cover transition-transform duration-500 group-hover/image:scale-105"
+                              priority={product.id === 1}
+                              sizes="(max-width: 1024px) 80vw, 600px"
+                            />
+                          </a>
+
+                          {/* İç navigasyon butonları */}
+                          <div className="absolute bottom-20 left-1/2 -translate-x-1/2">
+                            <div className="inline-flex h-12 rounded-full border border-[#dcdcdc] bg-white/90 backdrop-blur px-2 overflow-hidden shadow-sm">
+                              <button
+                                onClick={prevSlide}
+                                disabled={isFirstSlide}
+                                className={`w-12 h-12 flex items-center justify-center relative group ${
+                                  isFirstSlide 
+                                    ? 'text-[#cccccc] cursor-not-allowed' 
+                                    : 'text-[#666666]'
+                                }`}
+                                aria-label="Previous"
+                              >
+                                <div className={`absolute inset-2 rounded-full transition-colors duration-200 ${
+                                  isFirstSlide ? 'bg-transparent' : 'bg-transparent group-hover:bg-[#258535]'
+                                }`}></div>
+                                <ChevronLeft className={`w-5 h-5 stroke-[1.2] relative z-10 transition-colors duration-200 ${
+                                  isFirstSlide ? 'text-[#cccccc]' : 'text-[#666666] group-hover:text-white'
+                                }`} />
+                              </button>
+                              <button
+                                onClick={nextSlide}
+                                disabled={isLastSlide}
+                                className={`w-12 h-12 flex items-center justify-center relative group ${
+                                  isLastSlide 
+                                    ? 'text-[#cccccc] cursor-not-allowed' 
+                                    : 'text-[#666666]'
+                                }`}
+                                aria-label="Next"
+                              >
+                                <div className={`absolute inset-2 rounded-full transition-colors duration-200 ${
+                                  isLastSlide ? 'bg-transparent' : 'bg-transparent group-hover:bg-[#258535]'
+                                }`}></div>
+                                <ChevronRight className={`w-5 h-5 stroke-[1.2] relative z-10 transition-colors duration-200 ${
+                                  isLastSlide ? 'text-[#cccccc]' : 'text-[#666666] group-hover:text-white'
+                                }`} />
+                              </button>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   ))}
@@ -171,25 +268,22 @@ export function ProductionLinesSlider() {
             </div>
           </div>
 
-          {/* Navigation Buttons */}
-          <div className="hidden md:flex justify-center md:justify-end mt-8">
-            <div className="inline-flex h-11 rounded-full border border-[#b0b0b0] overflow-hidden">
-              <button
-                onClick={prevSlide}
-                className="w-11 h-11 flex items-center justify-center bg-white text-[#666666] hover:text-[#444444] transition-colors duration-200"
-              >
-                <ChevronLeft className="w-7 h-7 stroke-[1.2]" />
-              </button>
-              <button
-                onClick={nextSlide}
-                className="w-11 h-11 flex items-center justify-center bg-white text-[#666666] hover:text-[#444444] transition-colors duration-200"
-              >
-                <ChevronRight className="w-7 h-7 stroke-[1.2]" />
-              </button>
-            </div>
-          </div>
         </div>
       </div>
+      {/* Görsel slayt alanı için ölçek animasyonu (sol metin alanı etkilenmez) */}
+      <style jsx global>{`
+        #pls-slider .slick-slide .image-slide {
+          transform: scale(0);
+          opacity: 0;
+          transition: transform 700ms ease-in-out, opacity 700ms ease-in-out;
+          will-change: transform, opacity;
+          transform-origin: 50% 50%;
+        }
+        #pls-slider .slick-current .image-slide {
+          transform: scale(1);
+          opacity: 1;
+        }
+      `}</style>
     </section>
   );
 }
