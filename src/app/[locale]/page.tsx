@@ -1,13 +1,10 @@
-'use client';
-
 import { HeroSlider } from '@/components/hero-slider'
 import { ProductGroupSlider } from '@/components/product-group-slider'
 import { ProductionLinesSlider } from '@/components/production-lines-slider'
 import { LaminationSlider } from '@/components/lamination-slider'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useParams } from 'next/navigation'
-import { Suspense, useState, useEffect } from 'react'
+import { Suspense } from 'react'
 
 // Loading Component
 function LoadingFallback() {
@@ -40,59 +37,20 @@ function ErrorFallback({ componentName }: { componentName: string }) {
   )
 }
 
-export default function Home() {
-  const params = useParams();
-  const locale = params?.locale as string || 'tr';
-  const [isClient, setIsClient] = useState(false);
+type HomeProps = {
+  params: { locale: string }
+}
 
-  useEffect(() => {
-    setIsClient(true);
-    
-    // Ana sayfa için scroll pozisyonunu geri yükle
-    const savedScrollPosition = sessionStorage.getItem('homepage-scroll-position');
-    if (savedScrollPosition) {
-      const scrollY = parseInt(savedScrollPosition, 10);
-      // Hemen scroll yap
-      window.scrollTo(0, scrollY);
-      
-      // Birkaç kez daha kontrol et ve scroll yap
-      const timeouts = [0, 50, 100, 200, 500];
-      timeouts.forEach(delay => {
-        setTimeout(() => {
-          window.scrollTo(0, scrollY);
-        }, delay);
-      });
-    }
-  }, []);
-
-  // Sayfa kapatılırken scroll pozisyonunu kaydet
-  useEffect(() => {
-    const handleBeforeUnload = () => {
-      sessionStorage.setItem('homepage-scroll-position', window.scrollY.toString());
-    };
-
-    const handleScroll = () => {
-      sessionStorage.setItem('homepage-scroll-position', window.scrollY.toString());
-    };
-
-    window.addEventListener('beforeunload', handleBeforeUnload);
-    window.addEventListener('scroll', handleScroll);
-
-    return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
-
-  if (!isClient) {
-    return null;
-  }
+export default function Home({ params }: HomeProps) {
+  const locale = params?.locale || 'tr';
 
   return (
     <div className="pt-24"> {/* Navbar height offset */}
       {/* Hero Section */}
       <section className="relative">
-        <HeroSlider />
+        <Suspense fallback={<LoadingFallback />}>
+          <HeroSlider locale={locale} />
+        </Suspense>
       </section>
 
       {/* Lamination Section */}
@@ -129,9 +87,6 @@ export default function Home() {
                   fill
                   className="object-cover"
                   priority
-                  onError={(e) => {
-                    console.error('Image load error:', e)
-                  }}
                 />
               </div>
             </div>

@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
-import { useParams } from 'next/navigation'
 import Image from 'next/image'
 
 const slides = [
@@ -30,12 +29,14 @@ const slides = [
   }
 ]
 
-export function HeroSlider() {
+type HeroSliderProps = {
+  locale: string
+}
+
+export function HeroSlider({ locale }: HeroSliderProps) {
   const [currentSlide, setCurrentSlide] = useState(0)
   const [isClient, setIsClient] = useState(false)
   const [hasError, setHasError] = useState(false)
-  const params = useParams()
-  const locale = params?.locale as string || 'tr'
 
   useEffect(() => {
     setIsClient(true)
@@ -75,9 +76,13 @@ export function HeroSlider() {
     )
   }
 
-  // Client-side rendering kontrolü
+  // Server-side rendering için boş alan
   if (!isClient) {
-    return null
+    return (
+      <div className="relative w-full h-[calc(100vh-80px)] overflow-hidden">
+        {/* Boş alan - hiçbir şey gösterme */}
+      </div>
+    )
   }
 
   // Safe slide access
