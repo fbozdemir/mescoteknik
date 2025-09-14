@@ -47,19 +47,52 @@ export default function Home() {
 
   useEffect(() => {
     setIsClient(true);
+    
+    // Ana sayfa için scroll pozisyonunu geri yükle
+    const savedScrollPosition = sessionStorage.getItem('homepage-scroll-position');
+    if (savedScrollPosition) {
+      const scrollY = parseInt(savedScrollPosition, 10);
+      // Hemen scroll yap
+      window.scrollTo(0, scrollY);
+      
+      // Birkaç kez daha kontrol et ve scroll yap
+      const timeouts = [0, 50, 100, 200, 500];
+      timeouts.forEach(delay => {
+        setTimeout(() => {
+          window.scrollTo(0, scrollY);
+        }, delay);
+      });
+    }
+  }, []);
+
+  // Sayfa kapatılırken scroll pozisyonunu kaydet
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      sessionStorage.setItem('homepage-scroll-position', window.scrollY.toString());
+    };
+
+    const handleScroll = () => {
+      sessionStorage.setItem('homepage-scroll-position', window.scrollY.toString());
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
 
   if (!isClient) {
-    return <LoadingFallback />;
+    return null;
   }
 
   return (
     <div className="pt-24"> {/* Navbar height offset */}
       {/* Hero Section */}
       <section className="relative">
-        <Suspense fallback={<LoadingFallback />}>
-          <HeroSlider />
-        </Suspense>
+        <HeroSlider />
       </section>
 
       {/* Lamination Section */}

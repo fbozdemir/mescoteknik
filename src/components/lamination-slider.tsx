@@ -179,7 +179,7 @@ export function LaminationSlider() {
           </div>
 
           {/* Navigation Buttons */}
-          <div className="hidden md:flex justify-center md:justify-end mt-8">
+          <div className="flex justify-center md:justify-end mt-8">
             <div className="inline-flex h-11 rounded-full border border-[#b0b0b0] overflow-hidden">
               <button
                 onClick={prevSlide}

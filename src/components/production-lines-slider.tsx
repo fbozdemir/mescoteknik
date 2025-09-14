@@ -190,7 +190,7 @@ export function ProductionLinesSlider() {
                   {productionLines.map((product) => (
                     <div key={product.id} className="relative outline-none">
                       <div className="relative aspect-[16/9] flex items-center justify-center">
-                        <div className="relative w-[min(98%,880px)] aspect-square">
+                        <div className="relative w-[min(98vw,880px)] lg:w-[min(98%,880px)] aspect-square">
                           {/* Dış halka (gri temel) ve ilerleme halkası (yeşil) */}
                           <svg className="absolute inset-0" viewBox="0 0 100 100" aria-hidden="true">
                             <circle cx="50" cy="50" r="46" fill="none" stroke="#ececec" strokeWidth="0.5" />
@@ -222,11 +222,11 @@ export function ProductionLinesSlider() {
 
                           {/* İç navigasyon butonları */}
                           <div className="absolute bottom-20 left-1/2 -translate-x-1/2">
-                            <div className="inline-flex h-12 rounded-full border border-[#dcdcdc] bg-white/90 backdrop-blur px-2 overflow-hidden shadow-sm">
+                            <div className="inline-flex h-10 lg:h-12 rounded-full border border-[#dcdcdc] bg-white/90 backdrop-blur px-1.5 lg:px-2 overflow-hidden shadow-sm">
                               <button
                                 onClick={prevSlide}
                                 disabled={isFirstSlide}
-                                className={`w-12 h-12 flex items-center justify-center relative group ${
+                                className={`w-10 h-10 lg:w-12 lg:h-12 flex items-center justify-center relative group ${
                                   isFirstSlide 
                                     ? 'text-[#cccccc] cursor-not-allowed' 
                                     : 'text-[#666666]'
@@ -236,14 +236,14 @@ export function ProductionLinesSlider() {
                                 <div className={`absolute inset-2 rounded-full transition-colors duration-200 ${
                                   isFirstSlide ? 'bg-transparent' : 'bg-transparent group-hover:bg-[#258535]'
                                 }`}></div>
-                                <ChevronLeft className={`w-5 h-5 stroke-[1.2] relative z-10 transition-colors duration-200 ${
+                                <ChevronLeft className={`w-4 h-4 lg:w-5 lg:h-5 stroke-[1.2] relative z-10 transition-colors duration-200 ${
                                   isFirstSlide ? 'text-[#cccccc]' : 'text-[#666666] group-hover:text-white'
                                 }`} />
                               </button>
                               <button
                                 onClick={nextSlide}
                                 disabled={isLastSlide}
-                                className={`w-12 h-12 flex items-center justify-center relative group ${
+                                className={`w-10 h-10 lg:w-12 lg:h-12 flex items-center justify-center relative group ${
                                   isLastSlide 
                                     ? 'text-[#cccccc] cursor-not-allowed' 
                                     : 'text-[#666666]'
@@ -253,7 +253,7 @@ export function ProductionLinesSlider() {
                                 <div className={`absolute inset-2 rounded-full transition-colors duration-200 ${
                                   isLastSlide ? 'bg-transparent' : 'bg-transparent group-hover:bg-[#258535]'
                                 }`}></div>
-                                <ChevronRight className={`w-5 h-5 stroke-[1.2] relative z-10 transition-colors duration-200 ${
+                                <ChevronRight className={`w-4 h-4 lg:w-5 lg:h-5 stroke-[1.2] relative z-10 transition-colors duration-200 ${
                                   isLastSlide ? 'text-[#cccccc]' : 'text-[#666666] group-hover:text-white'
                                 }`} />
                               </button>

@@ -139,7 +139,7 @@ export default function OtherProductsSlider({ compact = false }: OtherProductsSl
         </div>
 
         {/* Products Slider - Mobile: tek ürün, Desktop: 2 ürün */}
-        <div className="relative overflow-hidden -mx-3">
+        <div className="relative overflow-hidden">
           {/* Mobile Slider - tek ürün */}
           <div className="block md:hidden">
             <div 
@@ -150,7 +150,7 @@ export default function OtherProductsSlider({ compact = false }: OtherProductsSl
               }}
             >
               {items.map((product, index) => (
-                <div key={product.id} className="w-full flex-shrink-0 px-3">
+                <div key={product.id} className="w-full flex-shrink-0 px-2">
                   <div className="group relative">
                     <div className="relative aspect-[16/9] w-full mb-4 overflow-hidden rounded-lg border border-gray-200">
                       <Link href={product.href} className="block w-full h-full cursor-pointer">
@@ -187,7 +187,7 @@ export default function OtherProductsSlider({ compact = false }: OtherProductsSl
               }}
             >
               {items.map((product, index) => (
-                <div key={product.id} className="w-1/2 flex-shrink-0 px-3">
+                <div key={product.id} className="w-1/2 flex-shrink-0 px-2">
                   <div className="group relative">
                     <div className="relative aspect-[16/9] w-full mb-4 overflow-hidden rounded-lg border border-gray-200">
                       <Link href={product.href} className="block w-full h-full cursor-pointer">
